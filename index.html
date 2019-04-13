@@ -5,8 +5,14 @@
 <body>
 
 <h3>Today is a beautiful day!!</h3>
+<ul></ul>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
+<script>
+    d3.select('h3').style('color', 'darkblue');
+    d3.select('h3').style('font-size', '24px');
+</script>
+
 <script>
     var fruits = ['apple', 'mango', 'banana', 'orange'];
     d3.select('ul')
