@@ -9,8 +9,6 @@
 <script src='https://d3js.org/d3.v4.min.js'></script>
 
 <script>
-    d3.select('h3').style('color', 'darkblue');
-    d3.select('h3').style('font-size', '24px');
     var fruits = ['apple', 'mango', 'banana', 'orange'];
     d3.select('ul')
         .selectAll('li')
@@ -18,6 +16,16 @@
         .enter()
         .append('li')
         .text(function(d) { return d; });
+
+        //Select SVG element
+    var svg = d3.select('svg');
+    //Create rectangle element inside SVG
+    svg.append('rect')
+       .attr('x', 50)
+       .attr('y', 50)
+       .attr('width', 200)
+       .attr('height', 100)
+       .attr('fill', 'green');
 </script>
 
 </body>
