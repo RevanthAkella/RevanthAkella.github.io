@@ -202,7 +202,7 @@ d3.csv("population.csv", function(err, data) {
 
 
           svg.append("g")
-              .attr("class", "states-choropleth")
+              .attr("class", "states-music")
             .selectAll("path")
               .data(topojson.feature(us, us.objects.states).features)
             .enter().append("path")
@@ -245,7 +245,7 @@ d3.csv("population.csv", function(err, data) {
 
               var coordinates = d3.mouse(this);
 
-              var map_width = $('.states-choropleth')[0].getBoundingClientRect().width;
+              var map_width = $('.states-music')[0].getBoundingClientRect().width;
 
               if (d3.event.layerX < map_width / 2) {
                 d3.select("#tooltip-container")
@@ -271,12 +271,11 @@ d3.csv("population.csv", function(err, data) {
   }
   drawMap(config.defaultValue);
 
-option_select.on("change", function() {
-  drawMap($("#selectors").find(".option-select").val());
-});
+    option_select.on("change", function() {
+      drawMap($("#selectors").find(".option-select").val());
+    });
 
+  });
+  });
 });
-});
-});
-
 </script>
