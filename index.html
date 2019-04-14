@@ -17,7 +17,7 @@ body {
   stroke-linejoin: round;
 }
 
-.categories-choropleth {
+.categories-music {
   fill: #ccc;
 }
 
@@ -337,7 +337,7 @@ d3.csv("artists.csv", function(err, data) {
 
   function makeMap(us) {
     svg.append("g")
-        .attr("class", "categories-choropleth")
+        .attr("class", "categories-music")
       .selectAll("path")
         .data(topojson.feature(us, us.objects.states).features)
       .enter().append("path")
@@ -372,7 +372,7 @@ d3.csv("artists.csv", function(err, data) {
 
             var coordinates = d3.mouse(this);
 
-            var map_width = $('.categories-choropleth')[0].getBoundingClientRect().width;
+            var map_width = $('.categories-music')[0].getBoundingClientRect().width;
 
             if (d3.event.pageX < map_width / 2) {
               d3.select("#tooltip-container")
