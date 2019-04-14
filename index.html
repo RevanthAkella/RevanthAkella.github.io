@@ -258,6 +258,7 @@ d3.csv("artists.csv", function(err, data) {
       .attr('height', (bar_height + gap * 2) * names.length + 30)
       .append("g")
       .attr("transform", "translate(10, 20)");
+      .attr("rotate(90 200 200)")
 
     chart.append("g")
       .attr("class", "x axis")
