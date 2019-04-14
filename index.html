@@ -47,40 +47,6 @@ body {
   fill: #000;
 }
 
-.chart {
-  background: #fff;
-  margin: 5px;
-}
-
-.chart .category-bar {
-  stroke: white;
-  fill: steelblue;
-}
-
-.chart .score {
-  fill: white;
-}
-
-.chart text.name {
-  fill: #000;
-}
-
-.chart line {
-  stroke: #c1c1c1;
-}
-
-.chart .rule {
-  fill: #000;
-}
-
-.main-category-text {
-  fill: #FF4A4A;
-}
-
-.main-category-bar {
-  stroke: #FF4A4A;
-  stroke-width: 2px;
-}
 
 </style>
 
@@ -257,7 +223,7 @@ d3.csv("artists.csv", function(err, data) {
       .attr('width', left_width + width + 100)
       .attr('height', (bar_height + gap * 2) * names.length + 30)
       .append("g")
-      .attr("transform", "translate(10, 20)", "rotate(90,200,200)");
+      .attr("transform", "translate(10, 20)");
 
     chart.append("g")
       .attr("class", "x axis")
