@@ -231,9 +231,9 @@ d3.csv("artists.csv", function(err, data) {
         name_values = [],
         values = [],
         chart,
-        width = 600,
-        height-of-bar = 40,
-        height = (height-of-bar + 2 * gap) * names.length;
+        width = 400,
+        height_of_bar = 20,
+        height = (height_of_bar + 2 * gap) * names.length;
 
     var total_categories = 0, categories_count = 0;
     Object.keys(name_id_map).forEach(function(n) {
@@ -275,13 +275,13 @@ d3.csv("artists.csv", function(err, data) {
     // redefine y for adjusting the gap
     var y = d3.scale.ordinal()
       .domain(names)
-      .rangeBands([0, (height-of-bar + 2 * gap) * names.length]);
+      .rangeBands([0, (height_of_bar + 2 * gap) * names.length]);
 
     chart = d3.select("#svg-display-display_canvas")
       .append('svg')
       .attr('class', 'chart')
       .attr('width', left_width + width + 100)
-      .attr('height', (height-of-bar + gap * 2) * names.length + 30)
+      .attr('height', (height_of_bar + gap * 2) * names.length + 30)
       .append("g")
       .attr("transform", "translate(10, 20)");
 
@@ -300,7 +300,7 @@ d3.csv("artists.csv", function(err, data) {
       .attr("x1", 0)
       .attr("x2", 0)
       .attr("y1", 0)
-      .attr("y2", (height-of-bar + gap * 2) * names.length);
+      .attr("y2", (height_of_bar + gap * 2) * names.length);
 
     chart.selectAll("rect")
       .data(name_values)
@@ -313,7 +313,7 @@ d3.csv("artists.csv", function(err, data) {
       .attr("width", function(d, i) {
         return x(d.value);
       })
-      .attr("height", height-of-bar)
+      .attr("height", height_of_bar)
       .style("fill", function(d) {
         var i = quantize(d.value);
         var color = colors[i].getColors();
