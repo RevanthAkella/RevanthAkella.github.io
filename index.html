@@ -124,7 +124,7 @@ body {
     d3.csv("artists.csv", function(err, data) {
 
     //we set the colors limits and the columns to read from
-      var config = {"color1":"#ddbac6","color2":"#cc0448","mainCategory":"Washington","averageCategory":"Nation Average","stateDataColumn":"location","valueDataColumn":"average_popularity"}
+      var config = {"color1":"#ddbac6","color2":"#cc0448","averageCategory":"Nation Average","stateDataColumn":"location","valueDataColumn":"average_popularity"}
 
       var WIDTH = 800, HEIGHT = 400;
 
@@ -133,7 +133,6 @@ body {
     //this is to scale the US map
       var SCALE = 0.7;
 
-      var MAIN_CATEGORY = config.mainCategory;
       var AVG_CATEGORY = config.averageCategory;
 
       function Interpolate(start, end, steps, count) {
