@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+/*Explanation of the data */
+
 <h1>Statewise Music Popularity</h1>
 <p>The data is obtained from the FreeMusicArchive Dataset. The dataset consists of artists and their locations.</p>
 <p>The dataset provides the average popularity of any artists' music in each state. This average gives us a generalized</p>
 <p>understanding of how popular music is as an activity in each state. This allows us to understand how popular an artist in an area.</p>
 <style>
+
+/* Setting the header and body style using CSS */
 h1{
   margin: auto;
   position: relative;
@@ -22,7 +26,7 @@ body {
   position: relative;
 }
 
-/* stylesheet for your custom graph */
+/* Styling the graphs and map */
 
 .categories {
   fill: none;
@@ -34,7 +38,9 @@ body {
   fill: #ccc;
 }
 
-#tooltip-container {
+
+/*Container for the message on hovering over a state */
+#hovermsg-container {
   margin: auto;
   position: absolute;
   background-color: #fff;
@@ -44,16 +50,18 @@ body {
   display: none;
 }
 
-#canvas svg {
+/* this styles the SVG canvas */
+#display_canvas svg {
   margin: auto;
   border: 0px;
 }
-
-.tooltip_key {
+/*set the font style for the text in the hover message */
+.hovermsg_key {
   font-weight: bold;
 }
 
-.tooltip_value {
+/* set the style for the numeric value of music popularity in a state */
+.hovermsg_value {
   margin-left: 2px;
   float: right;
 }
@@ -62,12 +70,13 @@ body {
   fill: #000;
 }
 
+/* setting the style for the bar-graph/histogram */
 .chart {
   background: #fff;
   margin: 5px;
 }
 
-.chart .category-bar {
+.chart .chart-bars {
   stroke: white;
   fill: steelblue;
 }
@@ -92,18 +101,24 @@ body {
   fill: #FF4A4A;
 }
 
-.main-category-bar {
+.main-chart-bars {
   stroke: #FF4A4A;
   stroke-width: 2px;
 }
 
 </style>
 
-<div id="tooltip-container"></div>
 
-<div id="canvas-svg"></div>
+/*container for the message on hover */
+<div id="hovermsg-container"></div>
 
+/* container for the canvas*/
+<div id="svg-display-display_canvas"></div>
+
+/* This link gets the d3.js file to enable d3 support in our page */
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+
+/*
 <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.1.0/topojson.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
@@ -115,7 +130,7 @@ d3.csv("artists.csv", function(err, data) {
 
   var WIDTH = 800, HEIGHT = 400;
 
-  var COLOR_COUNTS = 9;
+  var COLOR_COUNT = 9;
 
   var SCALE = 0.7;
 
@@ -157,46 +172,46 @@ d3.csv("artists.csv", function(err, data) {
       } : null;
   }
 
-  var COLOR_FIRST = config.color1, COLOR_LAST = config.color2;
+  var LOWER_COLOR_LIMIT = config.color1, UPPER_COLOR_LIMIT = config.color2;
 
-  var rgb = hexRgbConverter(COLOR_FIRST);
+  var rgb = hexRgbConverter(LOWER_COLOR_LIMIT);
 
-  var COLOR_START = new Color(rgb.r, rgb.g, rgb.b);
+  var STARTING_COLOR = new Color(rgb.r, rgb.g, rgb.b);
 
-  rgb = hexRgbConverter(COLOR_LAST);
-  var COLOR_END = new Color(rgb.r, rgb.g, rgb.b);
+  rgb = hexRgbConverter(UPPER_COLOR_LIMIT);
+  var ENDING_COLOR = new Color(rgb.r, rgb.g, rgb.b);
 
-  var MAP_CATEGORY = config.stateDataColumn;
-  var MAP_VALUE = config.valueDataColumn;
+  var CATEGORY_MAP = config.stateDataColumn;
+  var VALUE_MAP = config.valueDataColumn;
 
   var width = WIDTH,
       height = HEIGHT;
 
   var valueById = d3.map();
 
-  var startColors = COLOR_START.getColors(),
-      endColors = COLOR_END.getColors();
+  var startColors = STARTING_COLOR.getColors(),
+      endColors = ENDING_COLOR.getColors();
 
   var colors = [];
 
-  for (var i = 0; i < COLOR_COUNTS; i++) {
-    var r = Interpolate(startColors.r, endColors.r, COLOR_COUNTS, i);
-    var g = Interpolate(startColors.g, endColors.g, COLOR_COUNTS, i);
-    var b = Interpolate(startColors.b, endColors.b, COLOR_COUNTS, i);
+  for (var i = 0; i < COLOR_COUNT; i++) {
+    var r = Interpolate(startColors.r, endColors.r, COLOR_COUNT, i);
+    var g = Interpolate(startColors.g, endColors.g, COLOR_COUNT, i);
+    var b = Interpolate(startColors.b, endColors.b, COLOR_COUNT, i);
     colors.push(new Color(r, g, b));
   }
 
   var quantize = d3.scale.quantize()
       .domain([0, 1.0])
-      .range(d3.range(COLOR_COUNTS).map(function(i) { return i }));
+      .range(d3.range(COLOR_COUNT).map(function(i) { return i }));
 
   var path = d3.geo.path();
 
-  var svg = d3.select("#canvas-svg").append("svg")
+  var svg = d3.select("#svg-display-display_canvas").append("svg")
       .attr("width", width)
       .attr("height", height);
 
-  d3.tsv("https://s3-us-west-2.amazonaws.com/vida-public/geo/us-state-names.tsv", function(error, names) {
+  d3.tsv("https://s3-us-west-2.amazonaws.com/vida-public/geo/us-state-names.tsv", function(error, names) {  //gets the state names of each state in the US. Simpler implementation instead of creating a manual list.
 
   name_id_map = {};
   id_name_map = {};
@@ -207,12 +222,12 @@ d3.csv("artists.csv", function(err, data) {
   }
 
   data.forEach(function(d) {
-    var id = name_id_map[d[MAP_CATEGORY]];
-    valueById.set(id, +d[MAP_VALUE]);
+    var id = name_id_map[d[CATEGORY_MAP]];
+    valueById.set(id, +d[VALUE_MAP]);
   });
 
-  quantize.domain([d3.min(data, function(d){ return +d[MAP_VALUE] }),
-    d3.max(data, function(d){ return +d[MAP_VALUE] })]);
+  quantize.domain([d3.min(data, function(d){ return +d[VALUE_MAP] }),
+    d3.max(data, function(d){ return +d[VALUE_MAP] })]);
 
   function makeBars() {
     var names = [],
@@ -220,9 +235,9 @@ d3.csv("artists.csv", function(err, data) {
         name_values = [],
         values = [],
         chart,
-        width = 400,
-        bar_height = 20,
-        height = (bar_height + 2 * gap) * names.length;
+        width = 600,
+        height-of-bar = 40,
+        height = (height-of-bar + 2 * gap) * names.length;
 
     var total_categories = 0, categories_count = 0;
     Object.keys(name_id_map).forEach(function(n) {
@@ -264,13 +279,13 @@ d3.csv("artists.csv", function(err, data) {
     // redefine y for adjusting the gap
     var y = d3.scale.ordinal()
       .domain(names)
-      .rangeBands([0, (bar_height + 2 * gap) * names.length]);
+      .rangeBands([0, (height-of-bar + 2 * gap) * names.length]);
 
-    chart = d3.select("#canvas-svg")
+    chart = d3.select("#svg-display-display_canvas")
       .append('svg')
       .attr('class', 'chart')
       .attr('width', left_width + width + 100)
-      .attr('height', (bar_height + gap * 2) * names.length + 30)
+      .attr('height', (height-of-bar + gap * 2) * names.length + 30)
       .append("g")
       .attr("transform", "translate(10, 20)");
 
@@ -283,13 +298,13 @@ d3.csv("artists.csv", function(err, data) {
       .attr("y", 6)
       .attr("dy", ".71em")
       .style("text-anchor", "right")
-      .text(MAP_VALUE);
+      .text(VALUE_MAP);
 
     chart.selectAll(".tick").append("line")
       .attr("x1", 0)
       .attr("x2", 0)
       .attr("y1", 0)
-      .attr("y2", (bar_height + gap * 2) * names.length);
+      .attr("y2", (height-of-bar + gap * 2) * names.length);
 
     chart.selectAll("rect")
       .data(name_values)
@@ -302,7 +317,7 @@ d3.csv("artists.csv", function(err, data) {
       .attr("width", function(d, i) {
         return x(d.value);
       })
-      .attr("height", bar_height)
+      .attr("height", height-of-bar)
       .style("fill", function(d) {
         var i = quantize(d.value);
         var color = colors[i].getColors();
@@ -311,9 +326,9 @@ d3.csv("artists.csv", function(err, data) {
       })
       .attr("class", function(d) {
         if (d.name === MAIN_CATEGORY || d.name === AVG_CATEGORY) {
-          return "main-category-bar";
+          return "main-chart-bars";
         } else {
-          return "category-bar";
+          return "chart-bars";
         }
       });
 
@@ -371,38 +386,38 @@ d3.csv("artists.csv", function(err, data) {
         .on("mousemove", function(d) {
             var html = "";
 
-            html += "<div class=\"tooltip_kv\">";
-            html += "<span class=\"tooltip_key\">";
+            html += "<div class=\"hovermsg_kv\">";
+            html += "<span class=\"hovermsg_key\">";
             html += id_name_map[d.id];
             html += "</span>";
-            html += "<span class=\"tooltip_value\">";
+            html += "<span class=\"hovermsg_value\">";
             html += (valueById.get(d.id) ? valueById.get(d.id) : "");
             html += "";
             html += "</span>";
             html += "</div>";
 
-            $("#tooltip-container").html(html);
+            $("#hovermsg-container").html(html);
             $(this).attr("fill-opacity", "0.8");
-            $("#tooltip-container").show();
+            $("#hovermsg-container").show();
 
             var coordinates = d3.mouse(this);
 
             var map_width = $('.categories-music')[0].getBoundingClientRect().width;
 
             if (d3.event.pageX < map_width / 2) {
-              d3.select("#tooltip-container")
+              d3.select("#hovermsg-container")
                 .style("top", (d3.event.pageY + 15) + "px")
                 .style("left", (d3.event.pageX + 15) + "px");
             } else {
-              var tooltip_width = $("#tooltip-container").width();
-              d3.select("#tooltip-container")
+              var hovermsg_width = $("#hovermsg-container").width();
+              d3.select("#hovermsg-container")
                 .style("top", (d3.event.pageY + 15) + "px")
-                .style("left", (d3.event.pageX - tooltip_width - 30) + "px");
+                .style("left", (d3.event.pageX - hovermsg_width - 30) + "px");
             }
         })
         .on("mouseout", function() {
                 $(this).attr("fill-opacity", "1.0");
-                $("#tooltip-container").hide();
+                $("#hovermsg-container").hide();
             });
 
     svg.append("path")
