@@ -1,107 +1,113 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<h1>Statewise Music Popularity</h1>
-<p>The data is obtained from the FreeMusicArchive Dataset. The dataset consists of artists and their locations.</p>
-<p>The dataset provides the average popularity of any artists' music in each state. This average gives us a generalized</p>
-<p>understanding of how popular music is as an activity in each state. This allows us to understand how popular an artist in an area.</p>
-<style>
-h1{
-  margin: auto;
-  position: relative;
-}
-p{
-  margin: auto;
-  position: relative;
-}
-body {
-  margin: auto;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  width: 960px;
-  height: 500px;
-  background-color:
-  position: relative;
-}
+<head>
+  <style>
+  h1{
+    margin: auto;
+    position: relative;
+  }
+  p{
+    margin: auto;
+    position: relative;
+  }
+  body {
+    margin: auto;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    width: 960px;
+    height: 500px;
+    background-color:
+    position: relative;
+  }
 
-/* stylesheet for your custom graph */
+  /* stylesheet for your custom graph */
 
-.categories {
-  fill: none;
-  stroke: #fff;
-  stroke-linejoin: round;
-}
+  .categories {
+    fill: none;
+    stroke: #fff;
+    stroke-linejoin: round;
+  }
 
-.categories-music {
-  fill: #ccc;
-}
+  .categories-music {
+    fill: #ccc;
+  }
 
-#tooltip-container {
-  margin: auto;
-  position: relative;
-  background-color: #fff;
-  color: #000;
-  padding: 10px;
-  border: 1px solid;
-  display: none;
-}
+  #tooltip-container {
+    margin: auto;
+    position: relative;
+    background-color: #fff;
+    color: #000;
+    padding: 10px;
+    border: 1px solid;
+    display: none;
+  }
 
-#canvas svg {
-  position: relative;
-  border: 0px;
-}
+  #canvas svg {
+    position: relative;
+    border: 0px;
+  }
 
-.tooltip_key {
-  font-weight: bold;
-}
+  .tooltip_key {
+    font-weight: bold;
+  }
 
-.tooltip_value {
-  margin-left: 2px;
-  float: right;
-}
+  .tooltip_value {
+    margin-left: 2px;
+    float: right;
+  }
 
-.x-axis {
-  fill: #000;
-}
+  .x-axis {
+    fill: #000;
+  }
 
-.chart {
-  background: #fff;
-  margin: 5px;
-}
+  .chart {
+    background: #fff;
+    margin: 5px;
+  }
 
-.chart .category-bar {
-  stroke: white;
-  fill: steelblue;
-}
+  .chart .category-bar {
+    stroke: white;
+    fill: steelblue;
+  }
 
-.chart .score {
-  fill: white;
-}
+  .chart .score {
+    fill: white;
+  }
 
-.chart text.name {
-  fill: #000;
-}
+  .chart text.name {
+    fill: #000;
+  }
 
-.chart line {
-  stroke: #c1c1c1;
-}
+  .chart line {
+    stroke: #c1c1c1;
+  }
 
-.chart .rule {
-  fill: #000;
-}
+  .chart .rule {
+    fill: #000;
+  }
 
-.main-category-text {
-  fill: #FF4A4A;
-}
+  .main-category-text {
+    fill: #FF4A4A;
+  }
 
-.main-category-bar {
-  stroke: #FF4A4A;
-  stroke-width: 2px;
-}
+  .main-category-bar {
+    stroke: #FF4A4A;
+    stroke-width: 2px;
+  }
 
-</style>
+  </style>
+</head>
+  <body>
+    <h1>Statewise Music Popularity</h1>
+    <p>The data is obtained from the FreeMusicArchive Dataset. The dataset consists of artists and their locations.</p>
+    <p>The dataset provides the average popularity of any artists' music in each state. This average gives us a generalized</p>
+    <p>understanding of how popular music is as an activity in each state. This allows us to understand how popular an artist in an area.</p>
 
-<div id="tooltip-container"></div>
 
-<div id="canvas-svg"></div>
+    <div id="tooltip-container"></div>
+
+    <div id="canvas-svg"></div>
+
+  </body>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.1.0/topojson.min.js"></script>
@@ -117,7 +123,7 @@ d3.csv("artists.csv", function(err, data) {
 
   var COLOR_COUNTS = 9;
 
-  var SCALE = 0.7;
+  var SCALE = 0.4;
 
   var MAIN_CATEGORY = config.mainCategory;
   var AVG_CATEGORY = config.averageCategory;
