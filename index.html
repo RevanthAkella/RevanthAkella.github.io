@@ -136,6 +136,7 @@ body {
       var MAIN_CATEGORY = config.mainCategory;
       var AVG_CATEGORY = config.averageCategory;
 
+//This function extracts the color gradient for our map
       function Interpolate(start, end, steps, count) {
           var s = start,
               e = end,
@@ -162,6 +163,7 @@ body {
           };
       }
 
+//This function converts HexValuesto RGB values  -  the idea for this is from the USA Choropleth project in the d3 examples.
       function hexRgbConverter(hex) {
           var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
           return result ? {
@@ -171,6 +173,8 @@ body {
           } : null;
       }
 
+
+//setting the lower and upper color limits to create gradients
       var LOWER_COLOR_LIMIT = config.color1, UPPER_COLOR_LIMIT = config.color2;
 
       var rgb = hexRgbConverter(LOWER_COLOR_LIMIT);
@@ -210,7 +214,11 @@ body {
           .attr("width", width)
           .attr("height", height);
 
-      d3.tsv("https://s3-us-west-2.amazonaws.com/vida-public/geo/us-state-names.tsv", function(error, names) {  //gets the state names of each state in the US. Simpler implementation instead of creating a manual list.
+
+
+
+//gets the state names of each state in the US. Simpler implementation instead of creating a manual list.
+      d3.tsv("https://s3-us-west-2.amazonaws.com/vida-public/geo/us-state-names.tsv", function(error, names) {
 
       name_id_map = {};
       id_name_map = {};
@@ -228,7 +236,11 @@ body {
       quantize.domain([d3.min(data, function(d){ return +d[VALUE_MAP] }),
         d3.max(data, function(d){ return +d[VALUE_MAP] })]);
 
-      function makeBars() {
+
+
+
+//Function to create the barcharts
+      function histogramChartCreation() {
         var names = [],
             ids = [],
             name_values = [],
@@ -238,19 +250,23 @@ body {
             height_of_bar = 40
             height = (height_of_bar + 2 * gap) * names.length;
 
-        var total_categories = 0, categories_count = 0;
+
+
+        var total_no_of_categories = 0, count_of_categories = 0;
         Object.keys(name_id_map).forEach(function(n) {
           if (valueById.get(+name_id_map[n])) {
             ids.push(+name_id_map[n]);
             values.push(valueById.get(+name_id_map[n]));
             name_values.push({name: n, value: valueById.get(+name_id_map[n])});
-            total_categories += valueById.get(+name_id_map[n]);
-            categories_count++;
+            total_no_of_categories += valueById.get(+name_id_map[n]);
+            count_of_categories++;
           }
         });
 
-        values.push(Math.round(total_categories / categories_count));
-        name_values.push({name: AVG_CATEGORY, value: Math.round(total_categories / categories_count)});
+
+//finding the average of the categories to calculate the National Average
+        values.push(Math.round(total_no_of_categories / count_of_categories));
+        name_values.push({name: AVG_CATEGORY, value: Math.round(total_no_of_categories / count_of_categories)});
 
         values = values.sort(function(a, b) {
           return -(a - b);
@@ -280,6 +296,8 @@ body {
           .domain(names)
           .rangeBands([0, (height_of_bar + 2 * gap) * names.length]);
 
+
+//This creates the d3 elements for our histogram chart
         chart = d3.select("#svg-display-display_canvas")
           .append('svg')
           .attr('class', 'chart')
@@ -364,7 +382,9 @@ body {
           });
       }
 
-      function makeMap(us) {
+
+//this function creates teh Map of the US and allows us to input values in each state - This uses a library to generate the shape of the states.
+      function usaMapCreation(us) {
         svg.append("g")
             .attr("class", "categories-music")
           .selectAll("path")
@@ -385,6 +405,7 @@ body {
             .on("mousemove", function(d) {
                 var html = "";
 
+
                 html += "<div class=\"hovermsg_kv\">";
                 html += "<span class=\"hovermsg_key\">";
                 html += id_name_map[d.id];
@@ -395,15 +416,20 @@ body {
                 html += "</span>";
                 html += "</div>";
 
+
+
                 $("#hovermsg-container").html(html);
                 $(this).attr("fill-opacity", "0.8");
                 $("#hovermsg-container").show();
 
+
+
                 var coordinates = d3.mouse(this);
+                var width_of_map = $('.categories-music')[0].getBoundingClientRect().width;
 
-                var map_width = $('.categories-music')[0].getBoundingClientRect().width;
 
-                if (d3.event._X < map_width / 2) {
+
+                if (d3.event._X < width_of_map / 2) {
                   d3.select("#hovermsg-container")
                     .style("top", (d3.event._Y + 15) + "px")
                     .style("left", (d3.event._X + 15) + "px");
@@ -419,6 +445,8 @@ body {
                     $("#hovermsg-container").hide();
                 });
 
+
+
         svg.append("path")
             .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
             .attr("class", "categories")
@@ -426,9 +454,12 @@ body {
             .attr("d", path);
       }
 
+
+
+//creates the map and the histogram by calling our functions
       d3.json("https://s3-us-west-2.amazonaws.com/vida-public/geo/us.json", function(error, us) {
-        makeMap(us);
-        makeBars(data);
+        usaMapCreation(us);
+        histogramChartCreation(data);
       });
 
       });
