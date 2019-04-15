@@ -234,7 +234,7 @@ body {
             name_values = [],
             values = [],
             chart,
-            width =400,
+            width =600,
             height_of_bar = 50
             height = (height_of_bar + 2 * gap) * names.length;
 
@@ -351,9 +351,7 @@ body {
           .attr("dy", ".36em")
           .attr("text-anchor", "middle")
           .attr('class', function(d) {
-            if (d.name === MAIN_CATEGORY || d.name === AVG_CATEGORY) {
-              return "main-category-text";
-            } else {
+            if (d.name === AVG_CATEGORY) {
               return "";
             }
           })
