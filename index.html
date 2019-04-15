@@ -252,7 +252,7 @@ d3.csv("artists.csv", function(err, data) {
 
     var left_width = 150;
 
-    var y = d3.scale.linear()
+    var x = d3.scale.linear()
        .domain([0, d3.max(values)])
        .range([0, width]);
 
@@ -262,7 +262,7 @@ d3.csv("artists.csv", function(err, data) {
 
     var gap = 2;
     // redefine y for adjusting the gap
-    var x = d3.scale.ordinal()
+    var y = d3.scale.ordinal()
       .domain(names)
       .rangeBands([0, (bar_height + 2 * gap) * names.length]);
 
