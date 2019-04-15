@@ -133,6 +133,7 @@ body {
     //this is to scale the US map
       var SCALE = 0.7;
 
+      var MAIN_CATEGORY = config.mainCategory;
       var AVG_CATEGORY = config.averageCategory;
 
       function Interpolate(start, end, steps, count) {
@@ -233,7 +234,7 @@ body {
             name_values = [],
             values = [],
             chart,
-            width =600,
+            width =400,
             height_of_bar = 50
             height = (height_of_bar + 2 * gap) * names.length;
 
@@ -323,7 +324,9 @@ body {
                 "," + color.b + ")";
           })
           .attr("class", function(d) {
-            if (d.name === AVG_CATEGORY) {
+            if (d.name === MAIN_CATEGORY || d.name === AVG_CATEGORY) {
+              return "main-chart-bars";
+            } else {
               return "chart-bars";
             }
           });
@@ -350,7 +353,9 @@ body {
           .attr("dy", ".36em")
           .attr("text-anchor", "middle")
           .attr('class', function(d) {
-            if (d.name === AVG_CATEGORY) {
+            if (d.name === MAIN_CATEGORY || d.name === AVG_CATEGORY) {
+              return "main-category-text";
+            } else {
               return "";
             }
           })
