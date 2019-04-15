@@ -403,15 +403,15 @@ body {
 
                 var map_width = $('.categories-music')[0].getBoundingClientRect().width;
 
-                if (d3.event.pageX < map_width / 2) {
+                if (d3.event._X < map_width / 2) {
                   d3.select("#hovermsg-container")
-                    .style("top", (d3.event.pageY + 15) + "px")
-                    .style("left", (d3.event.pageX + 15) + "px");
+                    .style("top", (d3.event._Y + 15) + "px")
+                    .style("left", (d3.event._X + 15) + "px");
                 } else {
                   var hovermsg_width = $("#hovermsg-container").width();
                   d3.select("#hovermsg-container")
-                    .style("top", (d3.event.pageY + 15) + "px")
-                    .style("left", (d3.event.pageX - hovermsg_width - 30) + "px");
+                    .style("top", (d3.event._Y + 15) + "px")
+                    .style("left", (d3.event._X - hovermsg_width - 30) + "px");
                 }
             })
             .on("mouseout", function() {
